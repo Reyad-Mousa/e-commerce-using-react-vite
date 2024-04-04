@@ -1,6 +1,9 @@
 import { Container, Row, Col } from "react-bootstrap";
 import { useEffect } from "react";
-import { actGetProductsByPrefix } from "@store/Products/productsSlice";
+import {
+  actGetProductsByPrefix,
+  productsCleanUp,
+} from "@store/Products/productsSlice";
 import { useAppDispatch, useAppSelector } from "@store/hooks";
 import { useParams } from "react-router-dom";
 import { Product } from "@components/eCommerce";
@@ -18,6 +21,9 @@ const Products = () => {
     //   prefix = params.prefix;3
     // dispatch(actGetProductsByPrefix(prefix));} 4) ===
     dispatch(actGetProductsByPrefix(params.prefix as string));
+    return () => {
+      dispatch(productsCleanUp());
+    };
   }, [dispatch, params]);
 
   const ProductsList =
