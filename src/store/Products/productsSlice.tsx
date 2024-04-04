@@ -1,32 +1,32 @@
 import { createSlice } from "@reduxjs/toolkit";
-import actGetCategories from "./act/actGetCategories";
-import { TCategory } from "@customTypes/category";
+import actGetProductsByPrefix from "./act/actGetProductsByPrefix";
 import { TLoading } from "@customTypes/shared";
+import { TProduct } from "@customTypes/product";
 
 // Define a type for the slice state
-interface CategoryState {
-  records: TCategory[];
+interface productsSlice {
+  records: TProduct[];
   loading: TLoading;
   error: string | null;
 }
 
 // Define the initial state using that type
-const initialState: CategoryState = {
+const initialState: productsSlice = {
   records: [],
   loading: "idle",
   error: null,
 };
 
-const categoriesSlice = createSlice({
-  name: "categories",
+const productsSlice = createSlice({
+  name: "products",
   initialState,
   reducers: {},
   extraReducers(builder) {
-    builder.addCase(actGetCategories.pending, (state) => {
+    builder.addCase(actGetProductsByPrefix.pending, (state) => {
       state.loading = "pending";
       state.error = null;
     });
-    builder.addCase(actGetCategories.fulfilled, (state, action) => {
+    builder.addCase(actGetProductsByPrefix.fulfilled, (state, action) => {
       state.loading = "succeeded";
       if (action.payload && typeof action.payload === "string") {
         state.error = action.payload;
@@ -35,7 +35,7 @@ const categoriesSlice = createSlice({
       }
     });
 
-    builder.addCase(actGetCategories.rejected, (state, action) => {
+    builder.addCase(actGetProductsByPrefix.rejected, (state, action) => {
       state.loading = "failed";
       if (action.payload && typeof action.payload === "string") {
         state.error = action.payload as string;
@@ -43,5 +43,6 @@ const categoriesSlice = createSlice({
     });
   },
 });
-export { actGetCategories };
-export default categoriesSlice.reducer;
+
+export { actGetProductsByPrefix };
+export default productsSlice.reducer;
