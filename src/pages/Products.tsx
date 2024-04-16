@@ -9,6 +9,7 @@ import { useParams } from "react-router-dom";
 import { Product } from "@components/eCommerce";
 import Loading from "@components/feedback/Loading";
 import GridList from "@components/common/GridList/GridList";
+import { TProduct } from "@customTypes/product";
 const Products = () => {
   const params = useParams();
   const dispatch = useAppDispatch();
@@ -16,6 +17,12 @@ const Products = () => {
   const { loading, records, error } = useAppSelector(
     (state) => state.productsSlice
   );
+  const cartItems = useAppSelector((state) => state.cartSlice.items);
+
+  const productsFullInfo = records.map((el) => ({
+    ...el,
+    quantity: cartItems[el.id as number] || 0,
+  }));
 
   useEffect(() => {
     // let prefix: string; (1
@@ -31,8 +38,8 @@ const Products = () => {
   return (
     <Container>
       <Loading status={loading} error={error}>
-        <GridList
-          records={records}
+        <GridList<TProduct>
+          records={productsFullInfo}
           renderItem={(record) => <Product {...record} />}
         />
       </Loading>
