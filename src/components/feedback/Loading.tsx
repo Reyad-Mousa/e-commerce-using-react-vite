@@ -13,7 +13,7 @@ const Loading = ({ status, error, children }: LoadingProps) => {
   if (status === "failed") {
     return <p>{error}</p>;
   }
-  return <>{children}</>;
+  return <div>{children}</div>;
 };
 
 export default Loading;

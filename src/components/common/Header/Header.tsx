@@ -6,6 +6,7 @@ import HeaderBasket from "@components/eCommerce/HeaderBasket/HeaderBasket";
 const { headerContainer, headerLogo } = styles;
 
 const Header = () => {
+  
   return (
     <header>
       <div className={headerContainer}>
