@@ -1,8 +1,10 @@
-import { Container, Row, Col } from "react-bootstrap";
+import { Container } from "react-bootstrap";
 import { Category } from "@components/eCommerce";
 import { useEffect } from "react";
 import { useAppDispatch, useAppSelector } from "@store/hooks";
 import actGetCategories from "@store/Categories/act/actGetCategories";
+import Loading from "@components/feedback/Loading";
+import GridList from "@components/common/GridList/GridList";
 
 const Categories = () => {
   const dispatch = useAppDispatch();
@@ -17,23 +19,14 @@ const Categories = () => {
     }
   }, [dispatch, records]);
 
-  const categoriesList =
-    records.length > 0
-      ? records.map((record) => (
-          <Col
-            key={record.id}
-            xs={6}
-            md={3}
-            className="d-flex justify-content-center mb-5 mt-2"
-          >
-            <Category {...record} />
-          </Col>
-        ))
-      : "There are no categories";
-
   return (
     <Container>
-      <Row>{categoriesList}</Row>
+      <Loading status={loading} error={error}>
+        <GridList
+          records={records}
+          renderItem={(record) => <Category {...record} />}
+        />
+      </Loading>
     </Container>
   );
 };

@@ -1,4 +1,4 @@
-import { Container, Row, Col } from "react-bootstrap";
+import { Container } from "react-bootstrap";
 import { useEffect } from "react";
 import {
   actGetProductsByPrefix,
@@ -7,6 +7,9 @@ import {
 import { useAppDispatch, useAppSelector } from "@store/hooks";
 import { useParams } from "react-router-dom";
 import { Product } from "@components/eCommerce";
+import Loading from "@components/feedback/Loading";
+import GridList from "@components/common/GridList/GridList";
+import { TProduct } from "@customTypes/product";
 const Products = () => {
   const params = useParams();
   const dispatch = useAppDispatch();
@@ -14,6 +17,16 @@ const Products = () => {
   const { loading, records, error } = useAppSelector(
     (state) => state.productsSlice
   );
+
+  const cartItems = useAppSelector((state) => state.cartSlice.items);
+  const wishListItemsId = useAppSelector(
+    (state) => state.WishlistSlices.itemsId
+  );
+  const productsFullInfo = records.map((el) => ({
+    ...el,
+    quantity: cartItems[el.id as number] || 0,
+    isLiked: wishListItemsId.includes(el.id),
+  }));
 
   useEffect(() => {
     // let prefix: string; (1
@@ -26,23 +39,14 @@ const Products = () => {
     };
   }, [dispatch, params]);
 
-  const ProductsList =
-    records.length > 0
-      ? records.map((record) => (
-          <Col
-            key={record.id}
-            xs={6}
-            md={3}
-            className="d-flex justify-content-center mb-5 mt-2"
-          >
-            <Product {...record} />
-          </Col>
-        ))
-      : "There are no products available";
-
   return (
     <Container>
-      <Row>{ProductsList}</Row>
+      <Loading status={loading} error={error}>
+        <GridList<TProduct>
+          records={productsFullInfo}
+          renderItem={(record) => <Product {...record} />}
+        />
+      </Loading>
     </Container>
   );
 };

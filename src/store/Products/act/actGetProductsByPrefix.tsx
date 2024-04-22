@@ -9,7 +9,7 @@ const actGetProductsByPrefix = createAsyncThunk(
     const { rejectWithValue } = thunkAPI;
     try {
       const response = await axios.get<TProduct>(
-        `http://localhost:3000/products?cat_prefix=${prefix}`
+        `/products?cat_prefix=${prefix}`
       );
       const data = response.data;
       return data;
