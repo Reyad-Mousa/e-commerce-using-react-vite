@@ -3,17 +3,25 @@ import { Badge, Navbar, Nav, Container } from "react-bootstrap";
 
 import styles from "./styles.module.css";
 import HeaderBasket from "@components/eCommerce/HeaderBasket/HeaderBasket";
+import HeaderWishlist from "@components/eCommerce/HeaderWishlist/HeaderWishlist";
+
 const { headerContainer, headerLogo } = styles;
 
 const Header = () => {
-  
   return (
     <header>
       <div className={headerContainer}>
         <h1 className={headerLogo}>
           <span>our</span> <Badge bg="info">Ecom</Badge>
         </h1>
-        <HeaderBasket />
+        <div className=" flex-row d-flex gap-2">
+          <HeaderWishlist />
+          <span
+            style={{ width: "2px", height: "35px" }}
+            className=" bg-black"
+          ></span>
+          <HeaderBasket />
+        </div>
       </div>
       <Navbar
         expand="lg"

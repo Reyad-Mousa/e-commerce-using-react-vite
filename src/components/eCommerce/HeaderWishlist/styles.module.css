@@ -1,16 +1,16 @@
-.basketContainer {
+.wishListContainer {
   position: relative;
   cursor: pointer;
   align-self: flex-end;
 }
 
-.basketQuantity {
-  background-color: #0dcaf0;
+.wishListQuantity {
+  background-color: #ff0000;
   height: 22px;
   width: 22px;
   border-radius: 10px;
   text-align: center;
-  border: 1px solid;
+  border: 1px solid black;
   position: absolute;
   top: -16px;
   right: -5px;
