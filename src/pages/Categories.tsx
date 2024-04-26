@@ -1,24 +1,11 @@
 import { Container } from "react-bootstrap";
 import { Category } from "@components/eCommerce";
-import { useEffect } from "react";
-import { useAppDispatch, useAppSelector } from "@store/hooks";
-import actGetCategories from "@store/Categories/act/actGetCategories";
 import Loading from "@components/feedback/Loading";
 import GridList from "@components/common/GridList/GridList";
+import useCategories from "@hooks/useCategories";
 
 const Categories = () => {
-  const dispatch = useAppDispatch();
-  const { loading, records, error } = useAppSelector(
-    (state) => state.CategoriesSlice
-  );
-
-  useEffect(() => {
-    // MAKE this when category not change mostly
-    if (!records.length) {
-      dispatch(actGetCategories());
-    }
-  }, [dispatch, records]);
-
+  const { loading, records, error } = useCategories();
   return (
     <Container>
       <Loading status={loading} error={error}>

@@ -1,13 +1,13 @@
 import { createAsyncThunk } from "@reduxjs/toolkit";
 import axios from "axios";
-import { TProduct } from "@customTypes/product";
+import { TProduct } from "@customTypes/product.types";
 
 type TResponse = TProduct[];
 
 const actGetWishlist = createAsyncThunk(
   "wishlist/actGetWishlist",
   async (_, thunkAPI) => {
-    const { rejectWithValue, fulfillWithValue } = thunkAPI;
+    const { rejectWithValue, fulfillWithValue, signal } = thunkAPI;
 
     try {
       const userWishlist = await axios.get<{ productId: number }[]>(
@@ -23,7 +23,8 @@ const actGetWishlist = createAsyncThunk(
         .join("&");
 
       const response = await axios.get<TResponse>(
-        `/products?${concatenatedItemsId}`
+        `/products?${concatenatedItemsId}`,
+        { signal }
       );
       return response.data;
     } catch (error) {

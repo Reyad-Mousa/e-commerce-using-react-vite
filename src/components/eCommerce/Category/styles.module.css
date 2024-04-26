@@ -1,6 +1,6 @@
 .categoryImg {
-  width: 180px;
-  height: 180px;
+  width: 10rem;
+  height: 10rem;
   overflow: hidden;
   border-radius: 50%;
   background-color: #f2f2f2;
@@ -11,6 +11,7 @@
 
 .categoryTitle {
   text-align: center;
-  font-size: 14px;
+  font-size: 1.1rem;
+  text-transform: capitalize;
   margin-top: 10px;
 }
