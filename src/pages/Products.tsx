@@ -8,8 +8,9 @@ const Products = () => {
   const { loading, error, productsFullInfo } = useProducts();
   return (
     <Container>
-      <Loading status={loading} error={error}>
+      <Loading status={loading} error={error} type="product">
         <GridList<TProduct>
+emptyMessage="there was no product"
           records={productsFullInfo}
           renderItem={(record) => <Product {...record} />}
         />

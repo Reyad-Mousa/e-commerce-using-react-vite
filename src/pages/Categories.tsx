@@ -8,8 +8,9 @@ const Categories = () => {
   const { loading, records, error } = useCategories();
   return (
     <Container>
-      <Loading status={loading} error={error}>
+      <Loading status={loading} error={error} type="category">
         <GridList
+        emptyMessage="there was no category"
           records={records}
           renderItem={(record) => <Category {...record} />}
         />
