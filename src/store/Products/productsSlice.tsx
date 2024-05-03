@@ -19,7 +19,7 @@ const initialState: productsSlice = {
 };
 
 const productsSlice = createSlice({
-  name: "products",
+  name: "products",   
   initialState,
   reducers: {
     productsCleanUp: (state) => {
