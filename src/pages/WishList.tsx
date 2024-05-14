@@ -12,8 +12,8 @@ const Wishlist = () => {
       <h1>Your Wishlist</h1>
       <Loading status={loading} error={error} type="cart">
         <GridList<TProduct>
-emptyMessage="your wishlist is empty"       
-   records={records}
+          emptyMessage="your wishlist is empty"
+          records={records}
           renderItem={(record) => <Product {...record} />}
         />
       </Loading>

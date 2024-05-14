@@ -1,11 +1,7 @@
-import { useForm, SubmitHandler } from "react-hook-form";
-import "bootstrap/dist/css/bootstrap.css";
-import Form from "react-bootstrap/Form";
-import Button from "react-bootstrap/Button";
-import { zodResolver } from "@hookform/resolvers/zod";
-import { signUpSchema, signUpType } from "src/validations/signUpSchema";
+import { Button, Spinner, Form } from "react-bootstrap";
 import Input from "@components/Form/input/Input";
-import useCheckEmailAvailability from "@hooks/useCheckEmailAvailability";
+import { Navigate } from "react-router-dom";
+import useRegister from "@hooks/useregister";
 
 // type TFormInput = {
 //   firstName: string;
@@ -17,52 +13,36 @@ import useCheckEmailAvailability from "@hooks/useCheckEmailAvailability";
 
 const Register = () => {
   const {
+    loading,
+    error,
+    accessToken,
+    emailAvailability,
+    formErrors,
+    submitForm,
+    emailOnBlurHandler,
     register,
     handleSubmit,
-    getFieldState,
-    trigger,
-    formState: { errors },
-  } = useForm<signUpType>({
-    mode: "onBlur",
-    resolver: zodResolver(signUpSchema),
-  });
-  const submitForm: SubmitHandler<signUpType> = (data) => {
-    console.log(data);
-  };
-
-  const {
-    emailAvailability,
-    enterEmail,
-    checkEmailAvailability,
-    resetCheckEmailAvailability,
-  } = useCheckEmailAvailability();
-
-  const emailOnBlurHandler = async (e: React.FocusEvent<HTMLInputElement>) => {
-    await trigger("email");
-    const value = e.target.value;
-    const { invalid, isDirty } = getFieldState("email");
-    if (isDirty && !invalid && enterEmail !== value) {
-      checkEmailAvailability(value);
-    }
-    if (isDirty && invalid && enterEmail) {
-      resetCheckEmailAvailability();
-    }
-  };
-
+  } = useRegister();
+  if (accessToken) {
+    return <Navigate to="/" />;
+  }
   return (
-    <div style={{ display: "block", padding: 30 }}>
+    <div
+      className=" col-lg-4 "
+      style={{ display: "block", padding: 30, margin: "0 auto" }}
+    >
       <h4 className=" text-center fw-bold mb-5">Register Account</h4>
       <Form onSubmit={handleSubmit(submitForm)}>
         <Input
           label="First Name"
           name="firstName"
-          error={errors.firstName?.message}
+          error={formErrors.firstName?.message}
           register={register}
         />
         <Input
           label="Last Name"
           name="lastName"
-          error={errors.lastName?.message}
+          error={formErrors.lastName?.message}
           register={register}
         />
         <Input
@@ -71,8 +51,8 @@ const Register = () => {
           register={register}
           onBlur={emailOnBlurHandler}
           error={
-            errors.email?.message
-              ? errors.email?.message
+            formErrors.email?.message
+              ? formErrors.email?.message
               : emailAvailability === "notAvailable"
               ? "This email is already in use."
               : emailAvailability === "failed"
@@ -90,23 +70,38 @@ const Register = () => {
         <Input
           label="Password"
           name="password"
-          error={errors.password?.message}
+          type="password"
+          error={formErrors.password?.message}
           register={register}
         />
         <Input
           label="Confirm Password"
           name="confirmPassword"
-          error={errors.confirmPassword?.message}
+          type="password"
+          error={formErrors.confirmPassword?.message}
           register={register}
         />
         <Button
           variant="info"
           type="submit"
           style={{ color: "white", marginTop: "14px" }}
-          disabled={emailAvailability === "checking" ? true : false}
+          disabled={
+            emailAvailability === "checking"
+              ? true
+              : false || loading === "pending"
+          }
         >
-          Submit
+          {loading === "pending" ? (
+            <>
+              <Spinner animation="border" size="sm"></Spinner> Loading ...
+            </>
+          ) : (
+            "Submit"
+          )}
         </Button>
+        {error && (
+          <p style={{ color: "#DC3545", marginTop: "10px" }}>{error}</p>
+        )}
       </Form>
     </div>
   );

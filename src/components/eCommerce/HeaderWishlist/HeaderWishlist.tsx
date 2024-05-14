@@ -10,6 +10,7 @@ const HeaderWishlist = () => {
 
   const totalQuantity = useAppSelector((state) => state.WishlistSlices.itemsId);
 
+  console.log(totalQuantity);
   return (
     <div className={wishListContainer} onClick={() => navigate("/wishlist")}>
       <WishList title="wishList icon" />

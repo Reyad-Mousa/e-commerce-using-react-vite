@@ -4,6 +4,7 @@ import actGetWishlist from "./act/actGetWishlist";
 import { TProduct } from "@customTypes/product.types";
 import { isString } from "@customTypes/guards";
 import { TLoading } from "@customTypes/shared.types";
+import { userLogOut } from "@store/auth/authSlice";
 
 interface IWishlist {
   itemsId: number[];
@@ -54,7 +55,11 @@ const wishList = createSlice({
     });
     builder.addCase(actGetWishlist.fulfilled, (state, action) => {
       state.loading = "succeeded";
-      state.productsFullInfo = action.payload;
+      if (action.payload.dataType === "productsFullInfo") {
+        state.productsFullInfo = action.payload.data as TProduct[];
+      } else if (action.payload.dataType === "ProductIds") {
+        state.itemsId = action.payload.data as number[];
+      }
     });
     builder.addCase(actGetWishlist.rejected, (state, action) => {
       state.loading = "failed";
@@ -62,9 +67,14 @@ const wishList = createSlice({
         state.error = action.payload;
       }
     });
+    // when logout reset
+    builder.addCase(userLogOut, (state) => {
+      state.itemsId = [];
+      state.productsFullInfo = [];
+    });
   },
 });
 
-export { actLikeToggle };
+export { actLikeToggle, actGetWishlist };
 export const { cleanWishlistProductsFullInfo } = wishList.actions;
 export default wishList.reducer;

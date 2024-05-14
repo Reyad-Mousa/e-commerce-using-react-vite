@@ -14,6 +14,8 @@ const useProducts = () => {
     (state) => state.productsSlice
   );
 
+  const userAccessToken = useAppSelector((state) => state.auth.accessToken);
+
   const cartItems = useAppSelector((state) => state.cartSlice.items);
   const wishListItemsId = useAppSelector(
     (state) => state.WishlistSlices.itemsId
@@ -22,6 +24,7 @@ const useProducts = () => {
     ...el,
     quantity: cartItems[el.id as number] || 0,
     isLiked: wishListItemsId.includes(el.id),
+    isAccessToken: userAccessToken ? true : false,
   }));
 
   useEffect(() => {
@@ -36,7 +39,7 @@ const useProducts = () => {
     };
   }, [dispatch, params]);
 
-  return { loading, error, productsFullInfo };
+  return { loading, error, productsFullInfo, userAccessToken };
 };
 
 export default useProducts;

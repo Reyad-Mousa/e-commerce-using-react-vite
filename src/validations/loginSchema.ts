@@ -1,13 +1,11 @@
 import { z } from "zod";
 
 const loginSchema = z.object({
-  email: z.string().min(1, { message: "Please enter your Email " }).email(),
-  password: z
+  email: z
     .string()
-    .min(8, { message: "Password must be at least 8 characters long" })
-    .regex(/[!@#$%&*()_+{}|":<>?]/, {
-      message: "Password should contain at least 1 special character",
-    }),
+    .min(4, { message: "Please enter your Email required" })
+    .email(),
+  password: z.string().min(4, { message: "Password is required" }),
 });
 type loginType = z.infer<typeof loginSchema>;
 

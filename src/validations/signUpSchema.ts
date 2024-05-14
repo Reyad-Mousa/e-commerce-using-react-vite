@@ -8,7 +8,7 @@ const signUpSchema = z
     password: z
       .string()
       .min(8, { message: "Password must be at least 8 characters long" })
-      .regex(/[!@#$%&*()_+{}|":<>?]/, {
+      .regex(/[!@#$%&*()_+{}~|":<>?]/, {
         message: "Password should contain at least 1 special character",
       }),
     confirmPassword: z

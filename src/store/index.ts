@@ -17,35 +17,46 @@ import CategoriesSlice from "./Categories/categoriesSlice";
 import productsSlice from "./Products/productsSlice";
 import cartSlice from "./cart/cartSlice";
 import WishlistSlices from "./Wishlist/WishlistSlices";
+import auth from "./auth/authSlice";
 
 // Configuration for Redux persist
 // 'key' is the key for the persisted reducer's part of the Redux state
 // 'storage' tells Redux persist to use localStorage for web as the storage backend
 // 'whitelist' is an array of string names of reducers that we want to persist
+
+const rootPersistConfig = {
+  key: "root",
+  storage,
+  whitelist: ["cart", "auth"],
+};
+
+const authPersistConfig = {
+  key: "auth",
+  storage,
+  whitelist: ["users", "accessToken"],
+};
+
 const cartPersistConfig = {
   key: "cart",
   storage,
   whitelist: ["items"],
 };
-const whitelistPersistConfig = {
-  key: "whitelist",
-  storage,
-  whitelist: ["itemsId"],
-};
 
 // Combine all your slices into a rootReducer
 const rootReducer = combineReducers({
+  auth: persistReducer(authPersistConfig, auth),
   CategoriesSlice,
   productsSlice,
   cartSlice: persistReducer(cartPersistConfig, cartSlice),
-  WishlistSlices: persistReducer(whitelistPersistConfig, WishlistSlices),
+  WishlistSlices: WishlistSlices,
 });
 
 // Create a persisted reducer
+const persistedReducer = persistReducer(rootPersistConfig, rootReducer);
 
 // Configure the Redux store with the persisted reducer
 const store = configureStore({
-  reducer: rootReducer,
+  reducer: persistedReducer,
   middleware: (getDefaultMiddleware) =>
     getDefaultMiddleware({
       serializableCheck: {
